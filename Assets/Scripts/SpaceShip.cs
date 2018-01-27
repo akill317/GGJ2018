@@ -11,7 +11,12 @@ public class SpaceShip : MonoBehaviour {
     Color originColor;
 
     public bool loadingAlien;
-    public bool loadingNecromancer;
+    public bool loadingGhost;
+
+    public GameObject loveBubblePrefab;
+
+    public GameObject alienRoom;
+    public GameObject ghostRoom;
 
     // Use this for initialization
     void Start() {
@@ -49,13 +54,23 @@ public class SpaceShip : MonoBehaviour {
     }
 
 
-    public void LoadAlien() {
+    public void LoadAlien(GameObject alien) {
+        alienRoom.SetActive(true);
+        alienRoom.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = alien.GetComponent<SpriteRenderer>().sprite;
         loadingAlien = true;
+        if (loadingGhost)
+            Match(alien.GetComponent<SpriteRenderer>().sprite, ghostRoom.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite);
+        Destroy(alien);
     }
 
-    void LoadNecromancer(GameObject necromancer) {
-        GetComponent<SpriteRenderer>().color = necromancer.GetComponent<SpriteRenderer>().color;
-        loadingNecromancer = false;
+    void LoadGhost(GameObject ghost) {
+        GetComponent<SpriteRenderer>().color = ghost.GetComponent<SpriteRenderer>().color;
+        ghostRoom.SetActive(true);
+        ghostRoom.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = ghost.GetComponent<SpriteRenderer>().sprite;
+        loadingGhost = true;
+        if (loadingAlien)
+            Match(alienRoom.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite, ghost.GetComponent<SpriteRenderer>().sprite);
+        Destroy(ghost);
     }
 
     void OnTriggerEnter2D(Collider2D collision) {
@@ -63,20 +78,19 @@ public class SpaceShip : MonoBehaviour {
             GameManager.instance.GameOver();
         }
         if (collision.tag == "Necromancer") {
-            if (loadingAlien) {
-                Match();
-            } else {
-                LoadNecromancer(collision.gameObject);
-            }
-            Destroy(collision.gameObject);
+            LoadGhost(collision.gameObject);
         }
     }
 
-    void Match() {
+    void Match(Sprite alien, Sprite ghost) {
         GetComponent<SpriteRenderer>().color = originColor;
         loadingAlien = false;
-        loadingNecromancer = false;
+        loadingGhost = false;
+        alienRoom.SetActive(false);
+        ghostRoom.SetActive(false);
         GameManager.instance.AddMatchPair();
+        var loveBubble = Instantiate(loveBubblePrefab, transform.position, Quaternion.identity);
+        loveBubble.GetComponent<LoveBubble>().OnLoveBubbleCreate(alien, ghost);
     }
 
     void OnDestoy() {

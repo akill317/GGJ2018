@@ -19,7 +19,10 @@ public class Ghost : MonoBehaviour {
     }
 
     public void Summoned() {
-        GameManager.instance.nacromancerSpawner.currentNacromancer.GetComponent<SpriteRenderer>().color = GetComponent<SpriteRenderer>().color;
+        //GameManager.instance.nacromancerSpawner.currentNacromancer.GetComponent<SpriteRenderer>().color = GetComponent<SpriteRenderer>().color;
+        GameManager.instance.nacromancerSpawner.currentNacromancer.GetComponent<SpriteRenderer>().sprite
+            = GetComponent<SpriteRenderer>().sprite;
+        GameManager.instance.nacromancerSpawner.currentNacromancer.GetComponent<SpriteRenderer>().color = Color.white;
         GameManager.instance.nacromancerSpawner.currentNacromancer.SummonSuccecced();
     }
 }

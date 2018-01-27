@@ -39,8 +39,7 @@ public class Alien : MonoBehaviour {
 
         if (collision.name == "SpaceShip" && isJumping) {
             collision.GetComponent<SpriteRenderer>().color = GetComponent<SpriteRenderer>().color;
-            collision.GetComponent<SpaceShip>().LoadAlien();
-            Destroy(gameObject);
+            collision.GetComponent<SpaceShip>().LoadAlien(gameObject);
         }
     }
 
