@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: adba9ecf7f5ff4d92978f001c56d3e30
+timeCreated: 1489077963
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Redensek
+  fontNames:
+  - Redensek
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

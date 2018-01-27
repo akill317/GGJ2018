@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 935cc488f5f48e14f9eb182ff53550b1
+timeCreated: 1487468828
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 64
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: babyblue
+  fontNames:
+  - babyblue
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: e3815ad87a8061a43b1c8d41a311e93e, type: 3}
+  customCharacters: 
+  fontRenderingMode: 1
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

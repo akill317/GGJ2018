@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 420780bb01ed4d34fb879ba237189796
+timeCreated: 1487112881
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -1
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Acknowledge TT (BRK)
+  fontNames:
+  - Acknowledge TT (BRK)
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 2
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
