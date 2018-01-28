@@ -39,6 +39,9 @@ public class GameManager : MonoBehaviour {
     public SerialHandler serialHandler;
 
     public int gameStartFrame;
+
+    public GameObject end;
+
     void Awake() {
         instance = this;
     }
@@ -53,14 +56,14 @@ public class GameManager : MonoBehaviour {
     private void SerialHandler_OnDataReceived(string message) {
         var data = message.Split(new string[] { "\t" }, System.StringSplitOptions.None);
         if (data.Length < 4) { return; }
-        if (currentGameState == GameState.menu && data[1] == 1.ToString()) {
+        if (currentGameState == GameState.menu && data[3] == 1.ToString()) {
             GameStart();
         }
     }
 
     // Update is called once per frame
     void Update() {
-        if (currentGameState == GameState.menu && Input.GetKeyDown(KeyCode.J)) {
+        if (currentGameState == GameState.menu && Input.GetKeyDown(KeyCode.L)) {
             GameStart();
         }
         if (Input.GetKeyDown(KeyCode.R)) {
@@ -90,11 +93,13 @@ public class GameManager : MonoBehaviour {
     public void GameOver() {
         currentGameState = GameState.gameOver;
         OnGameOver?.Invoke();
+        end.transform.DOScale(1, .6f).SetEase(Ease.OutBounce);
         DOTween.To(() => BGM.volume, (x) => BGM.volume = x, 0, 3).SetUpdate(true);
         DOTween.To(() => Time.timeScale, (x) => Time.timeScale = x, 0, 3).SetUpdate(true);
         GetComponent<Camera>().DOOrthoSize(5.5f, 3).SetUpdate(true).OnComplete(() => {
             SceneManager.LoadScene(0);
             currentGameState = GameState.menu;
+            DOTween.KillAll();
             Time.timeScale = 1;
         });
     }

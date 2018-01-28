@@ -42,7 +42,7 @@ public class SpaceShip : MonoBehaviour {
 
             rigid.AddForce(transform.up * forcePower);
 
-            if (data[1] == 1.ToString() && !justPressJ && Time.frameCount > GameManager.instance.gameStartFrame + 3) {
+            if (data[1] == 1.ToString() && !justPressJ && Time.frameCount > GameManager.instance.gameStartFrame + 5) {
                 rigid.AddForce(transform.up * forcePower, ForceMode2D.Impulse);
                 N2O.Play();
                 N2O.GetComponent<AudioSource>().Play();
@@ -71,7 +71,7 @@ public class SpaceShip : MonoBehaviour {
 
             rigid.AddForce(transform.up * forcePower);
 
-            if (Input.GetKeyDown(KeyCode.J) && Time.frameCount > GameManager.instance.gameStartFrame + 3) {
+            if (Input.GetKeyDown(KeyCode.J) && Time.frameCount > GameManager.instance.gameStartFrame + 5) {
                 rigid.AddForce(transform.up * forcePower, ForceMode2D.Impulse);
                 N2O.Play();
                 N2O.GetComponent<AudioSource>().Play();
