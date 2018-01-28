@@ -15,6 +15,7 @@ public class GhostSpawner : MonoBehaviour {
     }
 
     private void SpawnGhost(object sender, TempoClock.BeatEventArgs args) {
+
         Instantiate(ghostList[Random.Range(0, ghostList.Count)], transform.position, transform.rotation, transform);
     }
 

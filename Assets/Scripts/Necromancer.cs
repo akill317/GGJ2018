@@ -9,7 +9,7 @@ public class Necromancer : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
-        transform.DOMoveX(2.03f, 1);
+        transform.DOMoveX(1.75f, 1);
     }
 
     void Update() {

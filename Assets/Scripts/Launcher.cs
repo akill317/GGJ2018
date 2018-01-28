@@ -14,9 +14,24 @@ public class Launcher : MonoBehaviour {
 
     bool flip;
 
+    bool jussPressL;
     // Use this for initialization
     void Start() {
+        GameManager.instance.serialHandler.OnDataReceived += SerialHandler_OnDataReceived;
+    }
 
+    private void SerialHandler_OnDataReceived(string message) {
+        var data = message.Split(new string[] { "\t" }, System.StringSplitOptions.None);
+        if (data.Length < 4) { return; }
+        if (data[3] == 1.ToString() && !jussPressL) {
+            if (GameManager.instance.currentGameState == GameManager.GameState.play) {
+                    flip = !flip;
+            }
+            jussPressL = true;
+        }
+        if(data[3] == 0.ToString()) {
+            jussPressL = false;
+        }
     }
 
     // Update is called once per frame

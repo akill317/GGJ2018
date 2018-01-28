@@ -14,9 +14,30 @@ public class MagicCircleController : MonoBehaviour {
 
     public Animator summonEffectAnim;
 
+    bool justPressK;
     // Use this for initialization
     void Start() {
         enableSummon = true;
+        GameManager.instance.serialHandler.OnDataReceived += SerialHandler_OnDataReceived;
+    }
+
+    private void SerialHandler_OnDataReceived(string message) {
+        var data = message.Split(new string[] { "\t" }, System.StringSplitOptions.None);
+        if (data.Length < 4) { return; }
+        if (data[2] == 1.ToString() && !justPressK) {
+            if (GameManager.instance.currentGameState == GameManager.GameState.play) {
+                if (enableSummon) {
+                    if (passByGhost)
+                        SuccessSummon();
+                    //else
+                    //    FailSummon();
+                }
+            }
+            justPressK = true;
+        }
+        if (data[2] == 0.ToString()) {
+            justPressK = false;
+        }
     }
 
     // Update is called once per frame

@@ -21,11 +21,38 @@ public class SpaceShip : MonoBehaviour {
     public ParticleSystem N2O;
     public ParticleSystem Explode;
 
+    bool justPressJ = false;
     // Use this for initialization
     void Start() {
         originColor = GetComponent<SpriteRenderer>().color;
         rigid = GetComponent<Rigidbody2D>();
         GameManager.instance.OnGameOver += GameOver;
+        GameManager.instance.serialHandler.OnDataReceived += SerialHandler_OnDataReceived;
+    }
+
+    private void SerialHandler_OnDataReceived(string message) {
+        var data = message.Split(new string[] { "\t" }, System.StringSplitOptions.None);
+        if (data.Length < 4) { return; }
+        if (GameManager.instance.currentGameState == GameManager.GameState.play) {
+
+            var angle = Mathf.Lerp(180, -180, (1023 - float.Parse(data[0])) / 1023);
+            Debug.Log(data[0]);
+            Debug.Log(angle);
+            transform.rotation = Quaternion.Euler(0, 0, angle);
+
+            rigid.AddForce(transform.up * forcePower);
+
+            if (data[1] == 1.ToString() && !justPressJ && Time.frameCount > GameManager.instance.gameStartFrame + 3) {
+                rigid.AddForce(transform.up * forcePower, ForceMode2D.Impulse);
+                N2O.Play();
+                N2O.GetComponent<AudioSource>().Play();
+                justPressJ = true;
+            }
+            if (data[1] == 0.ToString()) {
+                justPressJ = false;
+            }
+
+        }
     }
 
     // Update is called once per frame
@@ -44,7 +71,7 @@ public class SpaceShip : MonoBehaviour {
 
             rigid.AddForce(transform.up * forcePower);
 
-            if (Input.GetKeyDown(KeyCode.J)) {
+            if (Input.GetKeyDown(KeyCode.J) && Time.frameCount > GameManager.instance.gameStartFrame + 3) {
                 rigid.AddForce(transform.up * forcePower, ForceMode2D.Impulse);
                 N2O.Play();
                 N2O.GetComponent<AudioSource>().Play();
@@ -103,13 +130,14 @@ public class SpaceShip : MonoBehaviour {
     }
 
     void OnDestoy() {
-        GameManager.instance.OnGameOver -= GameOver;
+        //GameManager.instance.OnGameOver -= GameOver;
     }
 
     void GameOver() {
         Explode.transform.position = transform.position;
         Explode.Play();
         Explode.GetComponent<AudioSource>().Play();
-        Destroy(gameObject);
+        gameObject.SetActive(false);
+        GameManager.instance.OnGameOver -= GameOver;
     }
 }

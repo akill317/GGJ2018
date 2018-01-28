@@ -6,9 +6,20 @@ public class Ghost : MonoBehaviour {
 
     public float speed;
 
+    float originalSpeed;
     // Use this for initialization
     void Start() {
+        originalSpeed = speed;
+        //TempoClock.Instance.Quarter += Pause;
+    }
 
+    private void Pause(object sender, TempoClock.BeatEventArgs args) {
+        if ((TempoClock.Instance.quartercount - 3) % 4 == 0) {
+            speed = 0;
+        }
+        if (TempoClock.Instance.quartercount % 4 == 0) {
+            speed = originalSpeed;
+        }
     }
 
     // Update is called once per frame

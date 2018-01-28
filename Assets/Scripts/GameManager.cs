@@ -36,6 +36,9 @@ public class GameManager : MonoBehaviour {
     public GameObject ButtonB;
     public GameObject ButtonC;
 
+    public SerialHandler serialHandler;
+
+    public int gameStartFrame;
     void Awake() {
         instance = this;
     }
@@ -43,6 +46,16 @@ public class GameManager : MonoBehaviour {
     // Use this for initialization
     void Start() {
         currentGameState = GameState.menu;
+        serialHandler = GetComponent<SerialHandler>();
+        serialHandler.OnDataReceived += SerialHandler_OnDataReceived;
+    }
+
+    private void SerialHandler_OnDataReceived(string message) {
+        var data = message.Split(new string[] { "\t" }, System.StringSplitOptions.None);
+        if (data.Length < 4) { return; }
+        if (currentGameState == GameState.menu && data[1] == 1.ToString()) {
+            GameStart();
+        }
     }
 
     // Update is called once per frame
@@ -51,22 +64,26 @@ public class GameManager : MonoBehaviour {
             GameStart();
         }
         if (Input.GetKeyDown(KeyCode.R)) {
-            Debug.Log(currentGameState);
+            SceneManager.LoadScene(0);
         }
     }
 
     void GameStart() {
-        currentGameState = GameState.play;
         menuPanel.DOFade(0, 1).OnComplete(() => {
-            ButtonA.transform.DOScale(0, 0.5f).SetDelay(4).SetEase(Ease.InBack);
-            ButtonB.transform.DOScale(0, 0.5f).SetDelay(4).SetEase(Ease.InBack);
-            ButtonC.transform.DOScale(0, 0.5f).SetDelay(4).SetEase(Ease.InBack);
+            if (ButtonA)
+                ButtonA.transform.DOScale(0, 0.5f).SetDelay(4).SetEase(Ease.InBack);
+            if (ButtonB)
+                ButtonB?.transform.DOScale(0, 0.5f).SetDelay(4).SetEase(Ease.InBack);
+            if (ButtonC)
+                ButtonC?.transform.DOScale(0, 0.5f).SetDelay(4).SetEase(Ease.InBack);
 
         });
         OnGameStart?.Invoke();
         BGM.volume = 1;
         BGM.Play();
         GetComponent<TempoClock>().enabled = true;
+        currentGameState = GameState.play;
+        gameStartFrame = Time.frameCount;
         StartCoroutine(TimeCountDown());
     }
 

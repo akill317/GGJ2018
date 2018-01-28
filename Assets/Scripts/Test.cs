@@ -22,7 +22,7 @@ public class Test : MonoBehaviour {
 		if (data.Length < 4) { return; }
 
         try {
-			Debug.Log(data[0] + ", " + data[1] + ", " + data[2] + ", " + data[3]);
+			//Debug.Log(data[0] + ", " + data[1] + ", " + data[2] + ", " + data[3]);
         } 
 		catch (System.Exception e) {
             Debug.LogWarning(e.Message);
