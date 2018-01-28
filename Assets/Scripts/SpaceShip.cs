@@ -18,6 +18,9 @@ public class SpaceShip : MonoBehaviour {
     public GameObject alienRoom;
     public GameObject ghostRoom;
 
+    public ParticleSystem N2O;
+    public ParticleSystem Explode;
+
     // Use this for initialization
     void Start() {
         originColor = GetComponent<SpriteRenderer>().color;
@@ -43,6 +46,8 @@ public class SpaceShip : MonoBehaviour {
 
             if (Input.GetKeyDown(KeyCode.J)) {
                 rigid.AddForce(transform.up * forcePower, ForceMode2D.Impulse);
+                N2O.Play();
+                N2O.GetComponent<AudioSource>().Play();
             }
 
             if (transform.position.x < -3 || transform.position.x > 3) {
@@ -60,6 +65,8 @@ public class SpaceShip : MonoBehaviour {
         loadingAlien = true;
         if (loadingGhost)
             Match(alien.GetComponent<SpriteRenderer>().sprite, ghostRoom.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite);
+        else
+            GetComponent<AudioSource>().Play();
         Destroy(alien);
     }
 
@@ -70,6 +77,8 @@ public class SpaceShip : MonoBehaviour {
         loadingGhost = true;
         if (loadingAlien)
             Match(alienRoom.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite, ghost.GetComponent<SpriteRenderer>().sprite);
+        else
+            GetComponent<AudioSource>().Play();
         Destroy(ghost);
     }
 
@@ -98,6 +107,9 @@ public class SpaceShip : MonoBehaviour {
     }
 
     void GameOver() {
+        Explode.transform.position = transform.position;
+        Explode.Play();
+        Explode.GetComponent<AudioSource>().Play();
         Destroy(gameObject);
     }
 }

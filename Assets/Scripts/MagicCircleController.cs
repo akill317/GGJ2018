@@ -12,6 +12,8 @@ public class MagicCircleController : MonoBehaviour {
     public Sprite originSprite;
     public Sprite canNotSummonSprite;
 
+    public Animator summonEffectAnim;
+
     // Use this for initialization
     void Start() {
         enableSummon = true;
@@ -19,11 +21,13 @@ public class MagicCircleController : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        if (enableSummon && Input.GetKeyDown(KeyCode.K)) {
-            if (passByGhost)
-                SuccessSummon();
-            else
-                FailSummon();
+        if (GameManager.instance.currentGameState == GameManager.GameState.play) {
+            if (enableSummon && Input.GetKeyDown(KeyCode.K)) {
+                if (passByGhost)
+                    SuccessSummon();
+                //else
+                //    FailSummon();
+            }
         }
     }
 
@@ -41,12 +45,15 @@ public class MagicCircleController : MonoBehaviour {
 
     void SuccessSummon() {
         passByGhost.GetComponent<Ghost>().Summoned();
+        summonEffectAnim.Play("Summon");
+        GetComponent<AudioSource>().Play();
         Destroy(passByGhost);
     }
 
     void FailSummon() {
         enableSummon = false;
         GetComponent<SpriteRenderer>().sprite = canNotSummonSprite;
+        GameManager.instance.nacromancerSpawner.currentNacromancer.SummonFailed();
         GetComponent<SpriteRenderer>().DOFade(0, 2).OnComplete(() => {
             GetComponent<SpriteRenderer>().DOFade(1, 0.2f).OnComplete(() => {
                 GetComponent<SpriteRenderer>().sprite = originSprite;

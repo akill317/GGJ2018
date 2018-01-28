@@ -9,7 +9,7 @@ public class Necromancer : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
-        transform.DOMoveX(2, 1);
+        transform.DOMoveX(2.03f, 1);
     }
 
     void Update() {
@@ -23,5 +23,9 @@ public class Necromancer : MonoBehaviour {
         transform.DOMove(launcherPos, moveSpeed).OnComplete(() => {
             GameManager.instance.Launcher.Launch(gameObject);
         });
+    }
+
+    public void SummonFailed() {
+        GetComponent<Animator>().Play("fail");
     }
 }

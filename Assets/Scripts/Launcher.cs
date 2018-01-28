@@ -12,6 +12,8 @@ public class Launcher : MonoBehaviour {
 
     float value;
 
+    bool flip;
+
     // Use this for initialization
     void Start() {
 
@@ -20,7 +22,7 @@ public class Launcher : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         if (GameManager.instance.currentGameState == GameManager.GameState.play) {
-            if (Input.GetKey(KeyCode.L)) {
+            if (flip) {
                 if (value < 1) {
                     value += increaseSpeed;
                 } else {
@@ -33,6 +35,11 @@ public class Launcher : MonoBehaviour {
                     value = 0;
                 }
             }
+
+            if (Input.GetKeyDown(KeyCode.L))
+                flip = !flip;
+
+
 
             transform.rotation = Quaternion.Euler(0, 0, Mathf.Lerp(-maxAngle, maxAngle, value));
         }

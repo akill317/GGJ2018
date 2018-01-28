@@ -9,17 +9,22 @@ public class GhostSpawner : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
-        GameManager.instance.OnGameStart += BeginSpawnGhost;
-        GameManager.instance.OnGameOver += StopSpawnGhost;
+        //GameManager.instance.OnGameStart += BeginSpawnGhost;
+        //GameManager.instance.OnGameOver += StopSpawnGhost;
+        TempoClock.Instance.Half += SpawnGhost; ;
     }
 
-    void BeginSpawnGhost() {
-        StartCoroutine(SpawnGhostRoutine());
+    private void SpawnGhost(object sender, TempoClock.BeatEventArgs args) {
+        Instantiate(ghostList[Random.Range(0, ghostList.Count)], transform.position, transform.rotation, transform);
     }
 
-    void StopSpawnGhost() {
-        StopAllCoroutines();
-    }
+    //void BeginSpawnGhost() {
+    //    StartCoroutine(SpawnGhostRoutine());
+    //}
+
+    //void StopSpawnGhost() {
+    //    StopAllCoroutines();
+    //}
 
     IEnumerator SpawnGhostRoutine() {
         yield return new WaitForSeconds(sendInterval);

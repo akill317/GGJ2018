@@ -11,18 +11,23 @@ public class AlienSpawner : MonoBehaviour {
     Transform rotator;
     // Use this for initialization
     void Start() {
-        GameManager.instance.OnGameStart += BeginSpawnAlien;
-        GameManager.instance.OnGameOver += StopSpawnAlien;
+        //GameManager.instance.OnGameStart += BeginSpawnAlien;
+        //GameManager.instance.OnGameOver += StopSpawnAlien;
+        TempoClock.Instance.Half += SpawnAlien;
         rotator = transform.parent.Find("Rotator");
     }
 
-    void BeginSpawnAlien() {
-        StartCoroutine(SpawnAlienRoutine());
+    private void SpawnAlien(object sender, TempoClock.BeatEventArgs args) {
+        Instantiate(alientList[Random.Range(0, alientList.Count)], transform.position, transform.rotation, rotator);
     }
 
-    void StopSpawnAlien() {
-        StopAllCoroutines();
-    }
+    //void BeginSpawnAlien() {
+    //    StartCoroutine(SpawnAlienRoutine());
+    //}
+
+    //void StopSpawnAlien() {
+    //    StopAllCoroutines();
+    //}
 
 
     IEnumerator SpawnAlienRoutine() {

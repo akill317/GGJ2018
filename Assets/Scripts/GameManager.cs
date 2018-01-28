@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour {
 
     public CanvasGroup menuPanel;
 
+    public AudioSource BGM;
+
     public enum GameState {
         menu,
         play,
@@ -29,6 +31,10 @@ public class GameManager : MonoBehaviour {
     public delegate void NormalDelegate();
     public NormalDelegate OnGameStart;
     public NormalDelegate OnGameOver;
+
+    public GameObject ButtonA;
+    public GameObject ButtonB;
+    public GameObject ButtonC;
 
     void Awake() {
         instance = this;
@@ -51,14 +57,23 @@ public class GameManager : MonoBehaviour {
 
     void GameStart() {
         currentGameState = GameState.play;
-        menuPanel.DOFade(0, 1);
+        menuPanel.DOFade(0, 1).OnComplete(() => {
+            ButtonA.transform.DOScale(0, 0.5f).SetDelay(4).SetEase(Ease.InBack);
+            ButtonB.transform.DOScale(0, 0.5f).SetDelay(4).SetEase(Ease.InBack);
+            ButtonC.transform.DOScale(0, 0.5f).SetDelay(4).SetEase(Ease.InBack);
+
+        });
         OnGameStart?.Invoke();
+        BGM.volume = 1;
+        BGM.Play();
+        GetComponent<TempoClock>().enabled = true;
         StartCoroutine(TimeCountDown());
     }
 
     public void GameOver() {
         currentGameState = GameState.gameOver;
         OnGameOver?.Invoke();
+        DOTween.To(() => BGM.volume, (x) => BGM.volume = x, 0, 3).SetUpdate(true);
         DOTween.To(() => Time.timeScale, (x) => Time.timeScale = x, 0, 3).SetUpdate(true);
         GetComponent<Camera>().DOOrthoSize(5.5f, 3).SetUpdate(true).OnComplete(() => {
             SceneManager.LoadScene(0);
